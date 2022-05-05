@@ -4,7 +4,6 @@ import numpy as np
 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 from sklearn.metrics import mean_squared_log_error
 from house_prices.preprocess import data_preprocessing
 from joblib import dump
@@ -57,20 +56,11 @@ def build_model(data: pd.DataFrame) -> dict[str, str]:
     X_train, X_test, X_validation, y_train, y_test, y_validation = \
         data_split_test_train_validation(data)
 
-    # Create Encoder
-    ordinal = OrdinalEncoder(
-        handle_unknown="use_encoded_value", unknown_value=np.nan)
-
-    # Create Scalar
-    scalar = StandardScaler()
-
     # Preprocessing(cleaning data and training encoders,scalars)
-    X_train = data_preprocessing(
-        X_train, encoder=ordinal, scalar=scalar, is_test=False)
+    X_train = data_preprocessing(X_train, is_test=False)
 
     # Preprocessing(cleaning data and using trained encoders,scalars)
-    X_validation = data_preprocessing(
-        X_validation, encoder=ordinal, scalar=scalar, is_test=True)
+    X_validation = data_preprocessing(X_validation, is_test=True)
 
     # Define an evaluation dictonary
     evaluations_dict = dict()
@@ -93,8 +83,7 @@ def build_model(data: pd.DataFrame) -> dict[str, str]:
     # Model Build Evalution on Testing Set
     # -------------------------------------
     # Preprocessing(cleaning data and using trained encoders,scalars)
-    X_test = data_preprocessing(
-        X_test, encoder=ordinal, scalar=scalar, is_test=True)
+    X_test = data_preprocessing(X_test, is_test=True)
 
     # Testing-set evaluation
     y_test_predictions = LR_model.predict(X_test)

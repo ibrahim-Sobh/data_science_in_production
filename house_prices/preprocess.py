@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
-from joblib import dump
+from sklearn.preprocessing import OrdinalEncoder, StandardScaler
+from joblib import dump, load
 
 ENCODER_PATH = "../models/encoder.joblib"
 SCALAR_PATH = "../models/scalar.joblib"
@@ -46,8 +47,22 @@ def scale_data(scalar, data: pd.DataFrame,
     return pd.DataFrame(scalar.transform(data), columns=data.columns)
 
 
-def data_preprocessing(data: pd.DataFrame, encoder,
-                       scalar, is_test: bool = False) -> pd.DataFrame:
+def data_preprocessing(data: pd.DataFrame,
+                       is_test: bool = False) -> pd.DataFrame:
+
+    if is_test:
+        # load the encoder
+        encoder = load(ENCODER_PATH)
+
+        # load the scalar
+        scalar = load(SCALAR_PATH)
+    else:
+        # Create Encoder
+        encoder = OrdinalEncoder(
+            handle_unknown="use_encoded_value", unknown_value=np.nan)
+
+        # Create Scalar
+        scalar = StandardScaler()
 
     # Carefully Selected Features (after analysis)
     list_of_features = ["OverallQual", "GrLivArea", "GarageCars",

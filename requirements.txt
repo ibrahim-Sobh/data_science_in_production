@@ -12,3 +12,4 @@ tensorflow-macos==2.8.0
 tensorflow-metal==0.4.0
 joblib==1.1.0 
 flake8==4.0.1
+house-prices==1.0.1
