@@ -74,7 +74,8 @@ def build_model(data: pd.DataFrame) -> dict[str, str]:
 
     # Validation-set evaluation
     y_valid_predictions = LR_model.predict(X_validation)
-    validation_evaluation = evaluate_performance(y_pred=y_valid_predictions,                                                 y_true=y_validation,
+    validation_evaluation = evaluate_performance(y_pred=y_valid_predictions,
+                                                 y_true=y_validation,
                                                  precision=3,
                                                  comment="Validation")
     evaluations_dict.update(validation_evaluation)
